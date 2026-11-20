@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mockup v2 – Flashcard Links</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* Same design tokens as the Artifact Library */
+:root {
+  --bg: #f5f4f0; --surface: #ffffff; --surface-2: #faf9f6;
+  --text: #1c1c1e; --text-2: #66666e; --text-3: #a3a3aa;
+  --border: rgba(20, 20, 30, 0.07);
+  --accent: #4f6bed; --accent-hover: #3f5ae0; --accent-soft: #e9edfd;
+  --danger: #e5484d; --danger-soft: #fdecec; --ok-fg: #1d7f46;
+  --shadow-sm: 0 1px 2px rgba(20,20,30,.04), 0 2px 8px rgba(20,20,30,.04);
+  --shadow-md: 0 2px 4px rgba(20,20,30,.04), 0 10px 28px rgba(20,20,30,.09);
+  --mark: #dce3ff; --switch-off: #d4d4da;
+}
+:root[data-theme="dark"] {
+  --bg: #131315; --surface: #1d1d20; --surface-2: #232327;
+  --text: #ececef; --text-2: #a0a0a8; --text-3: #65656d;
+  --border: rgba(255,255,255,.07);
+  --accent: #7c93ff; --accent-hover: #93a6ff; --accent-soft: rgba(124,147,255,.15);
+  --danger: #ff6b6b; --danger-soft: rgba(255,107,107,.14); --ok-fg: #6ee7a0;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 2px 6px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.4);
+  --mark: rgba(124,147,255,.34); --switch-off: #46464d;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: "Inter", -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  transition: background .3s ease, color .3s ease;
+}
+button, input { font: inherit; color: inherit; }
+svg.icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.page { max-width: 720px; margin: 0 auto; padding: 40px 16px 60px; }
+
+/* Mockup-only banner */
+.mock-note {
+  max-width: 720px; margin: 16px auto 0; padding: 12px 16px; border-radius: 12px;
+  background: var(--accent-soft); color: var(--text); font-size: 13.5px; line-height: 1.5;
+}
+.mock-note b { color: var(--accent); }
+
+/* Header */
+.app-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.app-header h1 { font-size: 34px; font-weight: 700; letter-spacing: -.025em; margin: 0; line-height: 1.1; }
+.subtitle { margin: 6px 0 0; font-size: 14px; color: var(--text-2); font-weight: 500; }
+.header-actions { display: flex; align-items: center; gap: 4px; }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 10px;
+  border: none; background: transparent; color: var(--text-2); cursor: pointer;
+  transition: background .15s ease, color .15s ease, transform .1s ease;
+}
+.icon-btn:hover { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+.sync {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px; margin-right: 4px;
+  border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap;
+  background: var(--surface); border: 1px solid var(--border); color: var(--text-2);
+}
+.sync svg.icon { width: 14px; height: 14px; stroke-width: 2.3; color: var(--ok-fg); }
+
+/* Composer */
+.composer {
+  display: flex; align-items: center; gap: 10px; background: var(--surface); border-radius: 18px;
+  padding: 8px 8px 8px 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+}
+.composer > svg.icon { color: var(--text-3); }
+.composer input { flex: 1; min-width: 0; height: 40px; border: none; outline: none; background: transparent; font-size: 15.5px; }
+.composer input::placeholder, .search input::placeholder { color: var(--text-3); }
+.hint { font-size: 12px; color: var(--text-3); white-space: nowrap; }
+.hint kbd, .edit-hint kbd {
+  font: inherit; font-size: 11px; font-weight: 600; color: var(--text-2);
+  padding: 1px 5px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--border);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px; border-radius: 12px;
+  border: none; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.btn.primary { background: var(--accent); color: #fff; opacity: .4; }
+.btn svg.icon { width: 16px; height: 16px; stroke-width: 2.4; }
+.notice { display: flex; align-items: center; gap: 8px; margin: 10px 4px 0; min-height: 20px; font-size: 13.5px; font-weight: 500; color: var(--accent); }
+.notice svg.icon { width: 15px; height: 15px; }
+
+/* Search + A–Z */
+.tools { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+.search {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 6px 0 14px;
+  border-radius: 13px; background: var(--surface-2); border: 1px solid var(--border);
+}
+.search > svg.icon { width: 16px; height: 16px; color: var(--text-3); }
+.search input { flex: 1; min-width: 0; height: 100%; border: none; outline: none; background: transparent; font-size: 14.5px; }
+.search .hint { margin-right: 6px; }
+.sort-toggle {
+  display: inline-flex; align-items: center; gap: 9px; flex-shrink: 0; height: 42px; padding: 0 11px 0 13px;
+  border-radius: 13px; background: var(--surface-2); border: 1px solid var(--border);
+  font-size: 13px; font-weight: 600; color: var(--text-2); cursor: pointer;
+}
+.switch { position: relative; width: 32px; height: 19px; border-radius: 999px; background: var(--switch-off); }
+.sort-toggle.on { color: var(--text); }
+.sort-toggle.on .switch { background: var(--accent); }
+.sort-toggle.on .switch::after { transform: translateX(13px); }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+
+/* ---------- NEW: the row without a picture ---------- */
+.list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.row {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  min-height: 68px; padding: 12px 14px 12px 20px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  box-shadow: var(--shadow-sm); cursor: pointer;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.row:hover, .row.hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.row-link { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.row-text { flex: 1; min-width: 0; }
+.title {
+  margin: 0; font-size: 16px; font-weight: 600; line-height: 1.4; letter-spacing: -.01em; word-break: break-word;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.title.untitled { color: var(--text-3); font-weight: 500; font-style: italic; }
+.meta { margin-top: 2px; font-size: 12.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+/* Buttons on the right; they fade in on hover (always shown on phones) */
+.actions { position: relative; z-index: 2; display: flex; gap: 2px; opacity: 0; transition: opacity .15s ease; }
+.row:hover .actions, .row.hover .actions { opacity: 1; }
+@media (hover: none) { .actions { opacity: .75; } }
+.actions .icon-btn { width: 34px; height: 34px; border-radius: 9px; }
+.actions .icon-btn:hover { background: var(--surface-2); box-shadow: none; }
+.actions .icon-btn.danger:hover { background: var(--danger-soft); color: var(--danger); }
+.actions .icon-btn.copied { color: var(--ok-fg); }
+.actions .icon-btn svg.icon { width: 16px; height: 16px; }
+
+/* Small "opens in a new tab" arrow at the far right */
+.go { color: var(--text-3); transition: color .15s ease, transform .2s ease; }
+.go svg.icon { width: 17px; height: 17px; }
+.row:hover .go, .row.hover .go { color: var(--accent); transform: translate(1px, -1px); }
+
+/* A new row, ready to type its name */
+.row.editing { box-shadow: var(--shadow-md), 0 0 0 4px var(--accent-soft); cursor: default; }
+.row.editing .actions, .row.editing .go, .row.editing .row-link { display: none; }
+.title-input {
+  position: relative; z-index: 2; width: 100%; height: 38px; padding: 0 12px; border-radius: 10px;
+  border: 1px solid var(--accent); background: var(--surface-2); color: var(--text);
+  font-size: 15px; font-weight: 600; box-shadow: 0 0 0 4px var(--accent-soft); outline: none;
+}
+.title-input::placeholder { color: var(--text-3); font-weight: 500; }
+.edit-hint { margin-top: 7px; font-size: 12px; color: var(--text-3); }
+
+mark { background: var(--mark); color: inherit; border-radius: 4px; padding: 0 1px; box-shadow: 0 0 0 1px var(--mark); }
+
+/* Phone preview frame (mockup only) */
+.phone-wrap { text-align: center; margin: 10px auto 60px; }
+.phone-wrap h3 { font-size: 14px; color: var(--text-2); font-weight: 600; margin: 0 0 12px; }
+.phone-wrap iframe { width: 390px; max-width: 100%; height: 760px; border: 10px solid #1c1c1e; border-radius: 36px; background: var(--bg); }
+.in-phone .mock-note, .in-phone .phone-wrap { display: none; }
+.in-phone .actions { opacity: .75; } /* phones have no hover, so buttons always show */
+
+@media (max-width: 560px) {
+  .row { gap: 6px; min-height: 64px; padding: 10px 8px 10px 16px; border-radius: 14px; }
+  .title { font-size: 15px; }
+  .meta { font-size: 12px; }
+  .actions .icon-btn { width: 36px; height: 36px; }
+  .go { display: none; } /* buttons already fill the right side on a phone */
+}
+@media (max-width: 480px) {
+  .page { padding-top: 24px; }
+  .app-header h1 { font-size: 28px; }
+  .hint { display: none; }
+  .sync .label { display: none; }
+  .sync { padding: 0 8px; }
+  .composer .btn .label { display: none; }
+  .composer .btn { padding: 0 12px; }
+}
+</style>
+</head>
+<body>
+  <div class="mock-note">
+    <b>Mockup v2 (just a picture, nothing works yet).</b> New: A–Z is switched on (so rows are in name order, Untitled last), and this shows dark mode. The sun button switches to light mode. The real app will also follow your device setting. Each row shows only the name and the Added date; no picture and no website.
+    The top row is a link you just added, waiting for its name. Rows 2 and 3 show what you see when the mouse is over a row
+    (row 3 also shows the green tick after copying). Scroll down for the phone view. 
+  </div>
+
+  <div class="page">
+    <header class="app-header">
+      <div>
+        <h1>Flashcard Links</h1>
+        <p class="subtitle">5 links</p>
+      </div>
+      <div class="header-actions">
+        <span class="sync"><svg class="icon" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="m9.5 14 2 2 3.5-3.5"/></svg><span class="label">Synced</span></span>
+        <button class="icon-btn" id="theme" aria-label="Toggle dark mode"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
+        <button class="icon-btn" aria-label="Sign out"><svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg></button>
+      </div>
+    </header>
+
+    <div class="composer">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      <input placeholder="Paste a link…" />
+      <span class="hint"><kbd>Enter</kbd> to save</span>
+      <button class="btn primary"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg><span class="label">Save</span></button>
+    </div>
+    <div class="notice"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Link copied</div>
+
+    <div class="tools">
+      <div class="search">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input placeholder="Search by name…" />
+        <span class="hint"><kbd>/</kbd> to search</span>
+      </div>
+      <button class="sort-toggle on"><span>A–Z</span><span class="switch"></span></button>
+    </div>
+
+    <main class="list">
+      <!-- Just added: name box ready to type into -->
+      <div class="row editing">
+        <div class="row-text">
+          <input class="title-input" placeholder="Give it a name…" autofocus />
+          <div class="edit-hint"><kbd>Enter</kbd> to save · <kbd>Esc</kbd> to skip</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <a class="row-link" href="#" aria-label="Grammar: 把 sentences with a longer name to show how two lines wrap neatly"></a>
+        <div class="row-text">
+          <p class="title">Grammar: 把 sentences with a longer name to show how two lines wrap neatly</p>
+          <div class="meta">Added 2026-11-03</div>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" title="Rename"><svg class="icon" viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+          <button class="icon-btn" title="Copy link"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="icon-btn danger" title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+        <span class="go"><svg class="icon" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+      </div>
+
+      <div class="row hover">
+        <a class="row-link" href="#" aria-label="HSK 3 Vocabulary – Unit 4"></a>
+        <div class="row-text">
+          <p class="title">HSK 3 Vocabulary – Unit 4</p>
+          <div class="meta">Added 2026-11-19</div>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" title="Rename"><svg class="icon" viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+          <button class="icon-btn" title="Copy link"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="icon-btn danger" title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+        <span class="go"><svg class="icon" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+      </div>
+
+      <div class="row hover">
+        <a class="row-link" href="#" aria-label="Measure words (量词) practice"></a>
+        <div class="row-text">
+          <p class="title">Measure words (量词) practice</p>
+          <div class="meta">Added 2026-11-12</div>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" title="Rename"><svg class="icon" viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+          <button class="icon-btn copied" title="Link copied"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></button>
+          <button class="icon-btn danger" title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+        <span class="go"><svg class="icon" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+      </div>
+
+      <div class="row">
+        <a class="row-link" href="#" aria-label="Untitled"></a>
+        <div class="row-text">
+          <p class="title untitled">Untitled</p>
+          <div class="meta">Added 2026-10-28</div>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" title="Rename"><svg class="icon" viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+          <button class="icon-btn" title="Copy link"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="icon-btn danger" title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+        <span class="go"><svg class="icon" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+      </div>
+    </main>
+  </div>
+
+  <div class="phone-wrap">
+    <h3>On a phone</h3>
+    <iframe src="mockup_v2.html?phone" title="Phone view"></iframe>
+  </div>
+
+<script>
+  if (location.search.includes('phone')) document.body.classList.add('in-phone');
+  try {
+    if (window.parent !== window && window.parent.document.documentElement.dataset.theme)
+      document.documentElement.dataset.theme = window.parent.document.documentElement.dataset.theme;
+  } catch (e) { /* some browsers block this when opened as a file */ }
+  const SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+  const MOON = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>';
+  const setIcon = (doc) => {
+    doc.querySelector('#theme svg').innerHTML = doc.documentElement.dataset.theme === 'dark' ? SUN : MOON;
+  };
+  setIcon(document);
+  document.getElementById('theme').onclick = () => {
+    const root = document.documentElement;
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    setIcon(document);
+    const f = document.querySelector('.phone-wrap iframe');
+    if (f && f.contentDocument) { f.contentDocument.documentElement.dataset.theme = root.dataset.theme; setIcon(f.contentDocument); }
+  };
+</script>
+</body>
+</html>
